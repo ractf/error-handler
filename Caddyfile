@@ -1,0 +1,9 @@
+:80 {
+    root * /static
+
+    file_server
+    templates
+    encode gzip
+
+    try_files {path} /index.html
+}

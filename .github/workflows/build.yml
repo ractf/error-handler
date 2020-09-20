@@ -1,0 +1,32 @@
+name: Build Docker Container
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@master
+
+    - name: Build Docker container
+      run: docker build -t ractf/error-handler:latest -t ghcr.io/ractf/error-handler:latest .
+
+    - name: Login to Docker Hub
+      if: github.ref == 'refs/heads/master'
+      run: docker login --username ractf --password ${{ secrets.password }}
+
+    - name: Login to Github Container Registry
+      if: github.ref == 'refs/heads/master'
+      run: echo ${{ secrets.ghtoken }} | docker login ghcr.io -u ${{ secrets.ghuser }} --password-stdin
+
+    - name: Push to Docker Hub
+      if: github.ref == 'refs/heads/master'
+      run: docker push ractf/error-handler:latest
+
+    - name: Push to Github Container Registry
+      if: github.ref == 'refs/heads/master'
+      run: docker push ghcr.io/ractf/error-handler:latest
