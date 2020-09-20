@@ -9,9 +9,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@master
-
     - name: Build Docker container
       run: docker build -t ractf/error-handler:latest -t ghcr.io/ractf/error-handler:latest .
 
